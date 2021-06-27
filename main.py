@@ -2,16 +2,14 @@ import os
 import discord
 import requests
 import json
+from keep_alive import keep_alive
 
 my_secret = os.environ['TOKEN']
 
 client = discord.Client()
 
-def get_movie_info(name):
+def get_movie_info(key):
   url = "https://raw.githubusercontent.com/FEND16/movie-json-data/master/json/top-rated-movies-01.json"
-
-  movie_name = name[12:]
-  print(movie_name)
 
   response = requests.get(url)
   json_data = response.json()
@@ -20,16 +18,14 @@ def get_movie_info(name):
 
   while True:
     try:
-      if(json_data[i]['title'] == (movie_name)):
+      if(json_data[i]['title'] == (key)):
 
-        movie_info = json_data[i]['title'] + "\n - " + str(json_data[i]['releaseDate']) + "\n - " + str(json_data[i]['imdbRating']) + "\n - " + str(json_data[i]['storyline'])
+        movie_info = "\n\n Title - " + json_data[i]['title'] + "\n Release Date - " + str(json_data[i]['releaseDate']) + "\nIMDB Rating - " + str(json_data[i]['imdbRating']) + "\nStoryline - " + str(json_data[i]['storyline']) + "\nGenre - " + str(json_data[i]['genres'])
 
         return(movie_info)
 
-        break
-    except IOError:
+    except IndexError:
       return("No  match!")      
-      break
 
     i += 1
 
@@ -47,8 +43,9 @@ async def on_message(message):
 
 
   if message.content.startswith('#movie_name'):
-    await message.channel.send(get_movie_info(message.content))
+    await message.channel.send(get_movie_info(message.content[12:]))
 
+keep_alive()
 client.run(my_secret)
 
 
