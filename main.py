@@ -9,7 +9,7 @@ my_secret = os.environ['TOKEN']
 client = discord.Client()
 
 def get_movie_info(key):
-  url = "https://raw.githubusercontent.com/FEND16/movie-json-data/master/json/top-rated-movies-01.json"
+  url = "https://raw.githubusercontent.com/PranavPrakasan07/movie-json-data/master/json/top-rated-movies-01.json"
 
   response = requests.get(url)
   json_data = response.json()
